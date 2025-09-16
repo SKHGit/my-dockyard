@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}User List{% endblock %}
+
+{% block content %}
+<div class="list-container">
+    <h2>User List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Username</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.contact }}</td>
+                <td>{{ user.username }}</td>
+                <td>
+                    <a href="{{ url_for('update_user', user_id=user.id) }}" class="btn-update">Update</a>
+                    <form action="{{ url_for('delete_user', user_id=user.id) }}" method="post" style="display:inline;">
+                        <button type="submit" class="btn-delete" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
