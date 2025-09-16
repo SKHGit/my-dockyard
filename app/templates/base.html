@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}User Auth App{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="theme-light-blue">
+
+    <header>
+        <nav>
+            <ul>
+                {% if session.user_id %}
+                    <li><a href="{{ url_for('user_list') }}">User List</a></li>
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flashes">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="theme-switcher">
+            <label for="theme-select">Theme:</label>
+            <select id="theme-select">
+                <option value="light-blue">Light Blue</option>
+                <option value="light-green">Light Green</option>
+                <option value="light-pink">Light Pink</option>
+                <option value="light-purple">Light Purple</option>
+                <option value="light-orange">Light Orange</option>
+                <option value="light-teal">Light Teal</option>
+                <option value="light-gray">Light Gray</option>
+            </select>
+        </div>
+    </footer>
+
+    <script>
+        const themeSelect = document.getElementById('theme-select');
+        const body = document.body;
+
+        themeSelect.addEventListener('change', () => {
+            body.className = 'theme-' + themeSelect.value;
+            localStorage.setItem('theme', themeSelect.value);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                body.className = 'theme-' + savedTheme;
+                themeSelect.value = savedTheme;
+            }
+        });
+    </script>
+</body>
+</html>
